@@ -1,32 +1,38 @@
 package pensamientos
 
 import (
+	sys "github.com/connorvanderhook/pienso/system/configuration"
 	"github.com/spf13/cobra"
-	"system"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 var Cmd = cobra.Command{
-	Use: "pienso"
-	Short: "daemon to serve web requests"
+	Use:   "pienso",
+	Short: "daemon to serve web requests",
 }
+
+var flagDevelopment = true
 
 // Application holds global variables to be used in each request
 type Application struct {
-	Configuration          *Configuration
-	// Template               *template.Template
-	DB              	*mgo.Session
+	Configuration *sys.Configuration
+	DB            *mongo.Session
 }
 
 func newApplication(templatePath string) *Application {
-	c := &system.Configuration{
-		PublicPath:    "public",
-		TemplatePath:  templatePath,
-		DatabaseURI:   mongodb.URI(Cmd),
+	c := &sys.Configuration{
+		PublicPath:   "public",
+		TemplatePath: templatePath,
+		// DatabaseURI:   mongo.DialWithTimeout("", 0),
 		IsDevelopment: flagDevelopment,
 	}
 	return &Application{Configuration: c}
 }
 
 func init() {
-	Cmd.run = command
+	Cmd.Run = command
+}
+
+func command(cmd *cobra.Command, list []string) {
+
 }

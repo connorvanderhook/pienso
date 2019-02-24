@@ -1,4 +1,4 @@
-package system
+package configuration
 
 type Configuration struct {
 	PublicPath    string
